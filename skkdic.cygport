@@ -1,0 +1,33 @@
+NAME="skkdic"
+VERSION=20150508
+RELEASE=1.1030
+CATEGORY="Text"
+SUMMARY="SKK input method dictionaries"
+DESCRIPTION="SKK dictionaries consist of Kana to Kanji conversion rules."
+HOMEPAGE="http://openlab.ring.gr.jp/skk/dic.html"
+md5sum=8eed639ccef5b491bd521e7380b77020
+SRC_URI="
+	http://pkgs.fedoraproject.org/repo/pkgs/skkdic/skkdic-${VERSION}T${RELEASE#*\.}.tar.bz2/${md5sum}/skkdic-${VERSION}T${RELEASE#*\.}.tar.bz2
+	http://pkgs.fedoraproject.org/cgit/skkdic.git/plain/README-skkdic.rh.ja
+	http://pkgs.fedoraproject.org/cgit/skkdic.git/plain/unannotation.awk
+"
+
+ARCH=noarch
+
+RESTRICT=diff
+
+src_compile() {
+	cd ${S}
+	rm -f SKK-JISYO.{L.unannotated,wrong}
+	cygmake SKK-JISYO.{L.unannotated,wrong} TOOLS_DIR=.
+}
+
+src_install() {
+	cd ${S}
+	insinto /usr/share/skk
+	doins SKK-JISYO* zipcode/SKK-JISYO*
+	dodoc README-skkdic.rh.ja
+	dodoc READMEs/committers.txt
+	dodoc edict_doc.txt
+	dodoc zipcode/README-zipcode.ja
+}
